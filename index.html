@@ -5,10 +5,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Miyako's Site</title>
 	<style>
+		body::before {
+			content: "";
+			position: fixed;
+			inset: -16px;
+			background: url("background.jpg") center / cover no-repeat;
+			filter: blur(14px);
+			z-index: -1;
+		}
+
 		body {
 			margin: 0;
 			min-height: 100vh;
-			background: url("background.jpg") center / cover no-repeat fixed;
 			display: flex;
 			align-items: center;
 			justify-content: center;
