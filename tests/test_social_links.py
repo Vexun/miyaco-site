@@ -18,8 +18,8 @@ class SocialLinksTest(unittest.TestCase):
         self.assertIn("socialLinksContainer.append(link)", self.html)
 
     def test_required_links_and_labels(self):
-        self.assertIn('{ label: "X.com", url: "https://x.com/" }', self.html)
-        self.assertIn('{ label: "GitHub", url: "https://github.com/" }', self.html)
+        self.assertIn('{ label: "X.com", url: "https://x.com/_Vexun" }', self.html)
+        self.assertIn('{ label: "GitHub", url: "https://github.com/Vexun" }', self.html)
 
     def test_bottom_centered_independent_group(self):
         social_styles = re.search(r"\.social-links\s*\{([^}]*)\}", self.html)
