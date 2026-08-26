@@ -42,6 +42,26 @@
 			margin: 0.75rem 0 0;
 			color: #444;
 		}
+
+		.social-links {
+			position: fixed;
+			bottom: 2rem;
+			left: 50%;
+			transform: translateX(-50%);
+			display: flex;
+			justify-content: center;
+			gap: 1.5rem;
+		}
+
+		.social-links a {
+			color: #222;
+			opacity: 0.7;
+			transition: opacity 0.2s ease;
+		}
+
+		.social-links a:hover {
+			opacity: 1;
+		}
 	</style>
 </head>
 <body>
@@ -49,5 +69,22 @@
 		<h1>Miyako's Site</h1>
 		<p>Work in progress &mdash; check back later.</p>
 	</div>
+	<nav class="social-links" aria-label="Social links"></nav>
+	<script>
+		const socialLinks = [
+			{ label: "X.com", url: "https://x.com/" },
+			{ label: "GitHub", url: "https://github.com/" }
+		];
+
+		const socialLinksContainer = document.querySelector(".social-links");
+		socialLinks.forEach(({ label, url }) => {
+			const link = document.createElement("a");
+			link.href = url;
+			link.target = "_blank";
+			link.rel = "noopener noreferrer";
+			link.textContent = label;
+			socialLinksContainer.append(link);
+		});
+	</script>
 </body>
 </html>
