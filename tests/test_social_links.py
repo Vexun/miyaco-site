@@ -26,12 +26,10 @@ class SocialLinksTest(unittest.TestCase):
         if social_styles is None:
             self.fail("social-links styles are missing")
         styles = social_styles.group(1)
-        self.assertIn("position: fixed", styles)
-        self.assertIn("bottom:", styles)
-        self.assertIn("left: 50%", styles)
-        self.assertIn("transform: translateX(-50%)", styles)
+        self.assertNotIn("position: fixed", styles)
         self.assertIn("display: flex", styles)
         self.assertIn("justify-content: center", styles)
+        self.assertIn("gap:", styles)
 
     def test_opacity_states(self):
         self.assertRegex(self.html, r"\.social-links\s+a\s*\{[^}]*opacity:\s*0\.[0-9]+")

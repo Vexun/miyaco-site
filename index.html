@@ -18,15 +18,45 @@
 
 		body {
 			margin: 0;
-			min-height: 100vh;
-			min-height: 100dvh;
-			box-sizing: border-box;
-			padding: 1.5rem;
+			height: 100vh;
+			height: 100dvh;
 			display: flex;
-			align-items: center;
-			justify-content: center;
+			flex-direction: column;
+			overflow: hidden;
 			font-family: system-ui, sans-serif;
 			-webkit-text-size-adjust: 100%;
+		}
+
+		.slider {
+			flex: 1 1 auto;
+			min-height: 0;
+			overflow: hidden;
+		}
+
+		.track {
+			display: flex;
+			width: 200%;
+			height: 100%;
+			transform: translateX(0);
+			transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+			will-change: transform;
+		}
+
+		.view {
+			flex: 0 0 50%;
+			height: 100%;
+			overflow-y: auto;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			padding: calc(1.5rem + env(safe-area-inset-top)) 1.5rem 1.5rem;
+			touch-action: pan-y;
+		}
+
+		.view:focus {
+			outline: none;
 		}
 
 		.box {
@@ -51,14 +81,90 @@
 			color: #444;
 		}
 
+		.view.projects {
+			justify-content: flex-start;
+			gap: clamp(1rem, 3vh, 2rem);
+			padding-top: clamp(2rem, 8vh, 4rem);
+			padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+		}
+
+		.projects-title {
+			margin: 0;
+			font-size: clamp(1.75rem, 5vw, 2.25rem);
+			color: #222;
+			text-align: center;
+		}
+
+		.projects-body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100%;
+			margin: auto 0;
+			gap: clamp(1rem, 3vh, 2rem);
+		}
+
+		.project-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+			gap: 1.25rem;
+			width: 100%;
+			max-width: 60rem;
+		}
+
+		.project {
+			display: block;
+			padding: 2rem clamp(1.25rem, 3vw, 2rem);
+			color: #222;
+			text-decoration: none;
+			transition: transform 0.2s ease, background 0.2s ease;
+		}
+
+		.project h3 {
+			margin: 0;
+			font-size: 1.3rem;
+			color: #222;
+		}
+
+		.project p {
+			margin: 0.6rem 0 0;
+			font-size: 0.95rem;
+			line-height: 1.5;
+			color: #444;
+		}
+
+		.repo {
+			display: block;
+			margin-top: 1rem;
+			font-size: 0.72rem;
+			letter-spacing: 0.02em;
+			opacity: 0.65;
+		}
+
+		@media (hover: hover) {
+			.project:hover {
+				background: rgba(255, 255, 255, 0.68);
+				transform: translateY(-2px);
+			}
+		}
+
+		.project:focus-visible {
+			outline: 2px solid rgba(34, 34, 34, 0.65);
+			outline-offset: 3px;
+		}
+
+		.construction {
+			margin: 0;
+			color: #444;
+			font-size: 0.95rem;
+			text-align: center;
+		}
+
 		.social-links {
-			position: fixed;
-			bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
-			left: 50%;
-			transform: translateX(-50%);
 			display: flex;
 			justify-content: center;
 			gap: 1.5rem;
+			padding: 0.5rem 1rem calc(1rem + env(safe-area-inset-bottom, 0px));
 		}
 
 		.social-links a {
@@ -73,6 +179,104 @@
 			opacity: 1;
 		}
 
+		.page-dots {
+			--dots-gap: 0rem;
+			position: fixed;
+			right: calc(0.5rem + env(safe-area-inset-right));
+			top: 50%;
+			transform: translateY(-13px);
+			display: flex;
+			flex-direction: column;
+			gap: var(--dots-gap);
+			z-index: 3;
+			transition: gap 0.22s ease, transform 0.22s ease;
+		}
+
+		.page-dots--projects {
+			transform: translateY(calc(-39px - var(--dots-gap)));
+		}
+
+		.dot {
+			width: 30px;
+			height: 26px;
+			padding: 0;
+			border: 0;
+			background: none;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			cursor: pointer;
+		}
+
+		.dot::after {
+			content: "";
+			width: 5px;
+			height: 5px;
+			border-radius: 50%;
+			background: #222;
+			opacity: 0.35;
+			transition: width 0.22s ease, height 0.22s ease, border-radius 0.22s ease,
+				opacity 0.22s ease, transform 0.22s ease;
+		}
+
+		.page-dots--home .dot:last-child::after {
+			transform: translateY(-14px);
+		}
+
+		.page-dots--projects .dot:first-child::after {
+			transform: translateY(14px);
+		}
+
+		.dot[aria-current="page"]::after {
+			width: 6px;
+			height: 6px;
+			opacity: 0.85;
+		}
+
+		@media (hover: hover) {
+			.page-dots:hover {
+				--dots-gap: 0.3rem;
+			}
+
+			.page-dots:hover .dot::after {
+				transform: translateY(0);
+			}
+
+			.dot:hover::after {
+				width: 20px;
+				height: 5px;
+				border-radius: 2px;
+				opacity: 0.65;
+			}
+
+			.page-dots:hover .dot[aria-current="page"]::after {
+				width: 24px;
+				height: 6px;
+				border-radius: 2px;
+				opacity: 0.9;
+			}
+		}
+
+		.dot:focus-visible {
+			outline: 2px solid rgba(34, 34, 34, 0.65);
+			outline-offset: 2px;
+		}
+
+		@media (max-width: 600px) {
+			.view {
+				padding-inline: 2.5rem;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.track,
+			.page-dots,
+			.project,
+			.dot::after {
+				transition: none;
+			}
+		}
+
 		@media (max-height: 480px) {
 			.box {
 				padding: 1.25rem clamp(1.5rem, 6vw, 3rem);
@@ -82,18 +286,66 @@
 				font-size: 1.75rem;
 			}
 
-			.social-links {
-				bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+			.view {
+				padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+			}
+
+			.view.projects {
+				padding-top: 1.25rem;
+			}
+
+			.projects-title {
+				font-size: 1.5rem;
+			}
+
+			.project p {
+				font-size: 0.875rem;
+			}
+
+			.repo {
+				margin-top: 0.6rem;
 			}
 		}
 	</style>
 </head>
 <body>
-	<div class="box">
-		<h1>Miyako's Site</h1>
-		<p>Work in progress &mdash; check back later.</p>
+	<div class="slider">
+		<div class="track" id="track">
+			<section class="view home" aria-label="Home">
+				<div class="box">
+					<h1>Miyako's Site</h1>
+					<p>Work in progress &mdash; check back later.</p>
+				</div>
+			</section>
+
+			<section class="view projects" id="projects" aria-label="Projects" aria-hidden="true" inert>
+				<h2 class="projects-title">Projects</h2>
+				<div class="projects-body">
+					<div class="project-grid">
+						<a class="box project" href="https://github.com/Vexun/FocusReward" target="_blank" rel="noopener noreferrer">
+							<h3>FocusReward</h3>
+							<p>Earn points by completing tasks, then spend them to unlock distracting sites for a limited time — a desktop app, browser extension, and local API.</p>
+							<span class="repo">github.com/Vexun/FocusReward</span>
+						</a>
+						<a class="box project" href="https://github.com/Vexun/Gachabooru" target="_blank" rel="noopener noreferrer">
+							<h3>Gachabooru</h3>
+							<p>A local, single-user gacha game built on Danbooru images. Draw five cards, call heads or tails to keep them, and bank your collection.</p>
+							<span class="repo">github.com/Vexun/Gachabooru</span>
+						</a>
+					</div>
+					<p class="construction">Still under construction, this is just temporary</p>
+				</div>
+			</section>
+		</div>
 	</div>
+
 	<nav class="social-links" aria-label="Social links"></nav>
+
+	<nav class="page-dots page-dots--home" aria-label="Pages">
+		<button class="dot" type="button" data-view="0" aria-label="Home" aria-current="page"></button>
+		<button class="dot" type="button" data-view="1" aria-label="Projects"></button>
+	</nav>
+
 	<script>
 		const socialLinks = [
 			{ label: "X.com", url: "https://x.com/_Vexun" },
@@ -109,6 +361,199 @@
 			link.textContent = label;
 			socialLinksContainer.append(link);
 		});
+
+		const track = document.querySelector("#track");
+		const views = Array.from(document.querySelectorAll(".view"));
+		const dots = Array.from(document.querySelectorAll(".dot"));
+		const pageDots = document.querySelector(".page-dots");
+		const slider = document.querySelector(".slider");
+		const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+		const PAGE_COUNT = views.length;
+		const LOCK_MS = 480;
+		const SWIPE_MIN_PX = 50;
+		const WHEEL_THRESHOLD = 60;
+
+		let current = 0;
+		let locked = false;
+		let wheelTotal = 0;
+		let wheelTimer = 0;
+		let swipeStart = null;
+
+		function indexFromLocation() {
+			return window.location.hash === "#projects" ? 1 : 0;
+		}
+
+		function viewUrl(index) {
+			return index === 0 ? window.location.pathname + window.location.search : "#projects";
+		}
+
+		function render(index, animate) {
+			current = index;
+			track.style.transition = animate ? "" : "none";
+			if (animate) {
+				void track.offsetWidth;
+			}
+			track.style.transform = `translateX(-${index * (100 / PAGE_COUNT)}%)`;
+			if (!animate) {
+				void track.offsetWidth;
+				requestAnimationFrame(() => {
+					track.style.transition = "";
+				});
+			}
+
+			views.forEach((view, viewIndex) => {
+				const isActive = viewIndex === index;
+				view.toggleAttribute("inert", !isActive);
+				if (isActive) {
+					view.removeAttribute("aria-hidden");
+				} else {
+					view.setAttribute("aria-hidden", "true");
+				}
+			});
+
+			dots.forEach((dot, dotIndex) => {
+				if (dotIndex === index) {
+					dot.setAttribute("aria-current", "page");
+				} else {
+					dot.removeAttribute("aria-current");
+				}
+			});
+
+			pageDots.classList.toggle("page-dots--home", index === 0);
+			pageDots.classList.toggle("page-dots--projects", index === 1);
+
+			document.title = index === 0 ? "Miyako's Site" : "Projects — Miyako's Site";
+		}
+
+		function goTo(index, options = {}) {
+			const { animate = true, history = "push", focus = false } = options;
+			const next = Math.max(0, Math.min(index, PAGE_COUNT - 1));
+			if (next === current || locked) {
+				return;
+			}
+
+			locked = true;
+			render(next, animate && !reducedMotion.matches);
+
+			if (history === "push") {
+				window.history.pushState({ view: next }, "", viewUrl(next));
+			} else if (history === "replace") {
+				window.history.replaceState({ view: next }, "", viewUrl(next));
+			}
+
+			if (focus) {
+				views[next].setAttribute("tabindex", "-1");
+				views[next].focus({ preventScroll: true });
+			}
+
+			window.setTimeout(() => {
+				locked = false;
+			}, LOCK_MS);
+		}
+
+		function syncToLocation() {
+			const index = indexFromLocation();
+			if (index === current) {
+				return;
+			}
+			locked = false;
+			goTo(index, { animate: true, history: "none" });
+		}
+
+		function handlePointerDown(event) {
+			if (event.pointerType === "mouse") {
+				return;
+			}
+			swipeStart = { id: event.pointerId, x: event.clientX, y: event.clientY };
+		}
+
+		function handlePointerUp(event) {
+			if (!swipeStart || swipeStart.id !== event.pointerId) {
+				return;
+			}
+			const dx = event.clientX - swipeStart.x;
+			const dy = event.clientY - swipeStart.y;
+			swipeStart = null;
+
+			if (Math.abs(dx) < SWIPE_MIN_PX || Math.abs(dx) <= Math.abs(dy) * 1.2) {
+				return;
+			}
+			goTo(dx < 0 ? current + 1 : current - 1);
+		}
+
+		function handlePointerCancel() {
+			swipeStart = null;
+		}
+
+		function handleWheel(event) {
+			if (locked) {
+				return;
+			}
+
+			const horizontal = Math.abs(event.deltaX) > Math.abs(event.deltaY);
+			const delta = horizontal ? event.deltaX : event.deltaY;
+			if (delta === 0) {
+				return;
+			}
+
+			if (!horizontal) {
+				const activeView = views[current];
+				const hasOverflow = activeView.scrollHeight > activeView.clientHeight;
+				const scrollingDownOnHome = delta > 0 && current === 0 && !hasOverflow;
+				const scrollingUpAtTop = delta < 0 && current === 1 && activeView.scrollTop <= 0;
+				if (!scrollingDownOnHome && !scrollingUpAtTop) {
+					return;
+				}
+			}
+
+			if (Math.sign(delta) !== Math.sign(wheelTotal)) {
+				wheelTotal = 0;
+			}
+			wheelTotal += delta;
+			window.clearTimeout(wheelTimer);
+			wheelTimer = window.setTimeout(() => {
+				wheelTotal = 0;
+			}, 200);
+
+			if (Math.abs(wheelTotal) < WHEEL_THRESHOLD) {
+				return;
+			}
+
+			const direction = wheelTotal > 0 ? 1 : -1;
+			wheelTotal = 0;
+			goTo(current + direction);
+		}
+
+		function handleKeyDown(event) {
+			if (event.metaKey || event.ctrlKey || event.altKey) {
+				return;
+			}
+			if (event.key === "ArrowRight") {
+				event.preventDefault();
+				goTo(current + 1, { focus: true });
+			} else if (event.key === "ArrowLeft") {
+				event.preventDefault();
+				goTo(current - 1, { focus: true });
+			}
+		}
+
+		dots.forEach((dot) => {
+			dot.addEventListener("click", () => {
+				goTo(Number(dot.dataset.view), { focus: true });
+			});
+		});
+
+		slider.addEventListener("pointerdown", handlePointerDown);
+		window.addEventListener("pointerup", handlePointerUp);
+		window.addEventListener("pointercancel", handlePointerCancel);
+		window.addEventListener("wheel", handleWheel, { passive: true });
+		window.addEventListener("keydown", handleKeyDown);
+		window.addEventListener("popstate", syncToLocation);
+		window.addEventListener("hashchange", syncToLocation);
+
+		render(indexFromLocation(), false);
+		window.history.replaceState({ view: current }, "", viewUrl(current));
 	</script>
 </body>
 </html>
