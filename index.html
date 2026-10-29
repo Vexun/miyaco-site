@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 	<title>Miyako's Site</title>
 	<style>
 		body::before {
@@ -17,25 +17,31 @@
 		body {
 			margin: 0;
 			min-height: 100vh;
+			min-height: 100dvh;
+			box-sizing: border-box;
+			padding: 1.5rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			font-family: system-ui, sans-serif;
+			-webkit-text-size-adjust: 100%;
 		}
 
 		.box {
 			background: rgba(255, 255, 255, 0.55);
 			backdrop-filter: blur(8px);
 			-webkit-backdrop-filter: blur(8px);
-			padding: 2.5rem 4rem;
+			padding: 2.5rem clamp(1.5rem, 8vw, 4rem);
 			border-radius: 1rem;
+			max-width: 100%;
 			text-align: center;
 		}
 
 		h1 {
 			margin: 0;
-			font-size: 2.5rem;
+			font-size: clamp(1.75rem, 9vw, 2.5rem);
 			color: #222;
+			overflow-wrap: break-word;
 		}
 
 		p {
@@ -45,7 +51,7 @@
 
 		.social-links {
 			position: fixed;
-			bottom: 2rem;
+			bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
 			left: 50%;
 			transform: translateX(-50%);
 			display: flex;
@@ -56,11 +62,27 @@
 		.social-links a {
 			color: #222;
 			opacity: 0.7;
+			display: inline-block;
+			padding: 0.5rem 0.25rem;
 			transition: opacity 0.2s ease;
 		}
 
 		.social-links a:hover {
 			opacity: 1;
+		}
+
+		@media (max-height: 480px) {
+			.box {
+				padding: 1.25rem clamp(1.5rem, 6vw, 3rem);
+			}
+
+			h1 {
+				font-size: 1.75rem;
+			}
+
+			.social-links {
+				bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+			}
 		}
 	</style>
 </head>
